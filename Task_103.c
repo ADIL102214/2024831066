@@ -12,6 +12,8 @@ SDL_Renderer *renderer = NULL;
 int game_is_running = FALSE;
 float circle1_x = -RADIUS;
 float circle1_y = WINDOW_HEIGHT/2.0f;
+float circle2_x = 0;
+float circle2_y = 0;
 
 int initialize_window(){
     if(SDL_Init(SDL_INIT_EVERYTHING)!=0){
@@ -51,6 +53,10 @@ void process_input(){
       break;
     case SDL_KEYDOWN:
       if (event.key.keysym.sym == SDLK_ESCAPE) game_is_running = FALSE;
+      if (event.key.keysym.sym == SDLK_RIGHT) circle2_x+=20.0f;
+      if (event.key.keysym.sym == SDLK_LEFT) circle2_x-=20.0f;
+      if (event.key.keysym.sym == SDLK_UP) circle2_y-=20.0f;
+      if (event.key.keysym.sym == SDLK_DOWN) circle2_y+=20.0f;
       break;
     }
 }
@@ -84,6 +90,7 @@ void draw(){
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer,255,255,255,255);
     draw_circle(renderer, (int)circle1_x, (int)circle1_y, RADIUS);
+    draw_circle(renderer, (int)circle2_x, (int)circle2_y, RADIUS);
     SDL_RenderPresent(renderer);
 }
 
