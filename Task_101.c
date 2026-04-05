@@ -9,6 +9,7 @@
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 int game_is_running = FALSE;
+int radius = 100;
 
 int initialize_window(){
     if(SDL_Init(SDL_INIT_EVERYTHING)!=0){
@@ -44,18 +45,17 @@ void process_input(){
     SDL_PollEvent(&event);
     switch(event.type){
         case SDL_QUIT:
-        game_is_running = FALSE;
-        break;
+          game_is_running = FALSE;
+          break;
         case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_ESCAPE) game_is_running = FALSE;
-        break;
-         
+          if (event.key.keysym.sym == SDLK_ESCAPE) game_is_running = FALSE;
+          break;
     }
 }
 
 
-void drawCircle(SDL_Renderer *renderer, int centerX, int centerY, int radius){
-    int x =radius;
+void draw_circle(SDL_Renderer *renderer, int centerX, int centerY, int radius){
+    int x = radius;
     int y = 0;
     int error = 1-radius;
     while(x>=y){
@@ -70,7 +70,7 @@ void drawCircle(SDL_Renderer *renderer, int centerX, int centerY, int radius){
         if(error<=0){
             y++;
             error+=2*y+1;
-        }if(error>0){
+        }else if(error>0){
             x--;
             y++;
             error+=2*y-2*x+1;
@@ -82,7 +82,7 @@ void draw(){
     SDL_SetRenderDrawColor(renderer,50,50,0,255);
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer,255,255,255,255);
-    drawCircle(renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 240);
+    draw_circle(renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, radius);
     SDL_RenderPresent(renderer);
 }
 
@@ -96,6 +96,7 @@ int main(int argc, char* argv[]){
     game_is_running = initialize_window();
     while(game_is_running){
         process_input();
+        //update();
         draw();
         SDL_Delay(16);
     }
