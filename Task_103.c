@@ -1,5 +1,6 @@
 #include<SDL2/SDL.h>
 #include<stdio.h>
+#include<math.h>
 
 #define FALSE 0
 #define TRUE 1
@@ -12,8 +13,9 @@ SDL_Renderer *renderer = NULL;
 int game_is_running = FALSE;
 float circle1_x = -RADIUS;
 float circle1_y = WINDOW_HEIGHT/2.0f;
-float circle2_x = 0;
-float circle2_y = 0;
+float circle2_x = RADIUS;
+float circle2_y = RADIUS;
+int collision = 0;
 
 int initialize_window(){
     if(SDL_Init(SDL_INIT_EVERYTHING)!=0){
@@ -88,15 +90,33 @@ void draw_circle(SDL_Renderer *renderer, int centerX, int centerY, int radius){
 void draw(){
     SDL_SetRenderDrawColor(renderer,255,195,105,255);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer,255,255,255,255);
-    draw_circle(renderer, (int)circle1_x, (int)circle1_y, RADIUS);
-    draw_circle(renderer, (int)circle2_x, (int)circle2_y, RADIUS);
+    if(collision%2 == 0){
+        SDL_SetRenderDrawColor(renderer,255,255,255,255);
+        draw_circle(renderer, (int)circle1_x, (int)circle1_y, RADIUS);
+        SDL_SetRenderDrawColor(renderer,0,0,0,255);
+        draw_circle(renderer, (int)circle2_x, (int)circle2_y, RADIUS);
+    }else if(collision%2 != 0){
+        SDL_SetRenderDrawColor(renderer,0,0,0,255);
+        draw_circle(renderer, (int)circle1_x, (int)circle1_y, RADIUS);
+        SDL_SetRenderDrawColor(renderer,255,255,255,255);
+        draw_circle(renderer, (int)circle2_x, (int)circle2_y, RADIUS);
+    }
     SDL_RenderPresent(renderer);
 }
 
 void update(){
     circle1_x += 3.0f;
     if(circle1_x > WINDOW_WIDTH+RADIUS) circle1_x = -RADIUS;
+
+    if(pow((2*RADIUS),2) >= pow((circle2_x-circle1_x),2)+pow((circle2_y-circle1_y),2)){
+        collision++ ;
+        circle2_x = RADIUS;
+        circle2_y = RADIUS;
+    }
+    if (circle2_x < RADIUS) circle2_x = RADIUS;
+    if (circle2_x > WINDOW_WIDTH - RADIUS) circle2_x = WINDOW_WIDTH - RADIUS;
+    if (circle2_y < RADIUS) circle2_y = RADIUS;
+    if (circle2_y > WINDOW_HEIGHT - RADIUS) circle2_y = WINDOW_HEIGHT - RADIUS;
 }
 
 void destroy_window(){
