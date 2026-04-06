@@ -13,7 +13,7 @@ SDL_Renderer *renderer = NULL;
 int game_is_running = FALSE;
 float circle1_x = -RADIUS;
 float circle1_y = WINDOW_HEIGHT/2.0f;
-float circle2_x = RADIUS;
+float circle2_x = WINDOW_WIDTH/2.0f;
 float circle2_y = RADIUS;
 int collision = 0;
 Uint32 color_change_time =0;
@@ -57,10 +57,10 @@ void process_input(){
     case SDL_KEYDOWN:
       if (event.key.keysym.sym == SDLK_ESCAPE) game_is_running = FALSE;
       if(SDL_GetTicks() > color_change_time){
-      if (event.key.keysym.sym == SDLK_RIGHT) circle2_x+=20.0f;
-      if (event.key.keysym.sym == SDLK_LEFT) circle2_x-=20.0f;
-      if (event.key.keysym.sym == SDLK_UP) circle2_y-=20.0f;
-      if (event.key.keysym.sym == SDLK_DOWN) circle2_y+=20.0f;
+        if (event.key.keysym.sym == SDLK_RIGHT) circle2_x+=20.0f;
+        if (event.key.keysym.sym == SDLK_LEFT) circle2_x-=20.0f;
+        if (event.key.keysym.sym == SDLK_UP) circle2_y-=20.0f;
+        if (event.key.keysym.sym == SDLK_DOWN) circle2_y+=20.0f;
       }
       break;
     }
@@ -112,7 +112,7 @@ void update(){
         return;
     }
     if(color_change_time != 0){
-        circle2_x = RADIUS;
+        circle2_x = WINDOW_WIDTH/2.0f;
         circle2_y = RADIUS;
         color_change_time = 0;
     }
